@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "41444204853",
+    "project_id": "doan-flightbooking-123",
+    "storage_bucket": "doan-flightbooking-123.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41444204853:android:b3d5a02637a22f544f2c7c",
+        "android_client_info": {
+          "package_name": "com.sanvemaybay.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLiRzsE9HoC1FKCZya6FX7ymoWNXa67ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
