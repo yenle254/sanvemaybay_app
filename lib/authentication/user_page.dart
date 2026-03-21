@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'authentication/login_page.dart';
 import 'package:sanvemaybay_app_fixed/page/home_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'login_page.dart';
 
@@ -27,7 +28,18 @@ class _UserPageState extends State<UserPage> {
   // Hàm Đăng xuất
   Future<void> _handleSignOut() async {
     await _auth.signOut();
-    // Cập nhật lại giao diện ngay lập tức thành "Chưa đăng nhập"
+
+    // 2. Đăng xuất sạch sẽ khỏi Google Sign-in (Xóa bộ nhớ tạm)
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+
+
+    } catch (e) {
+      print("Lỗi khi xóa phiên Google: $e");
+    }
+
+    // 3. Cập nhật lại giao diện thành "Khách"
     setState(() {
       currentUser = null;
     });

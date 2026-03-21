@@ -4555,43 +4555,128 @@ class _FillCustomerInfoPageSupportState
             }
           },
         ),
+        // bottomNavigationBar: new TextButton(
+        //   style: TextButton.styleFrom(padding: EdgeInsets.all(0.0)),
+        //
+        //   onPressed: () async {
+        //     if (!isAdultCompletelyFilled() ||
+        //         !isChildCompletelyFilled() ||
+        //         !isInfantCompletelyFilled() ||
+        //         !widget.flightInfo.contact.isFullOFInfo()) {
+        //       _confirmAllInfoAreFilled(context,
+        //           "Bạn vui lòng điền đầy đủ các thông tin bắt buộc trong \"Thông tin khách hàng\" trước khi thanh toán");
+        //     } else {
+        //       if (!isChildBirthdateValid() || !isInfantBirthdateValid()) {
+        //         _confirmAllInfoAreFilled(context,
+        //             "Ngày tháng năm sinh không hợp lệ! Vui lòng kiểm tra lại.");
+        //       } else {
+        //         if (widget.flightInfo.contact.email.length > 0 &&
+        //             !widget.flightInfo.contact.isValidEmail()) {
+        //           _confirmAllInfoAreFilled(
+        //               context, "Email không hợp lệ! Vui lòng kiểm tra lại.");
+        //         } else {
+        //           if (!widget.flightInfo.contact.isValidPhone()) {
+        //             _confirmAllInfoAreFilled(context,
+        //                 "Số điện thoại không hợp lệ! Vui lòng kiểm tra lại.");
+        //           } else {
+        //             widget.flightInfo.totalPrice += pricePayway;
+        //
+        //             // --- BẮT ĐẦU LƯU VÉ VỚI TRY-CATCH ---
+        //             // --- BẮT ĐẦU LƯU VÉ LAI (HYBRID) ---
+        //             try {
+        //
+        //               String randomPNR = "VJ${(100000 + DateTime.now().millisecondsSinceEpoch % 900000).toString()}";
+        //
+        //               Map<String, dynamic> newTicket = {
+        //                 "pnr": randomPNR,
+        //                 "depart": widget.flightInfo.depart,
+        //                 "destination": widget.flightInfo.destination,
+        //                 "date": "${widget.flightInfo.dateDepart.day}/${widget.flightInfo.dateDepart.month}/${widget.flightInfo.dateDepart.year}",
+        //                 "flightNo": widget.flightInfo.planeId1,
+        //                 "company": widget.flightInfo.company1,
+        //                 "price": widget.flightInfo.totalPrice,
+        //                 "contactName": widget.flightInfo.contact.fullname,
+        //                 "contactPhone": widget.flightInfo.contact.phone,
+        //                 "contactEmail": widget.flightInfo.contact.email,
+        //                 "timeDepart": widget.flightInfo.timeDepart1, // Giờ đi lượt đi
+        //                 "timeBack": widget.flightInfo.timeBack1,     // Giờ đến lượt đi
+        //                 "isRoundTrip": widget.flightInfo.isRoundTrip,
+        //                 if (widget.flightInfo.isRoundTrip) ...{
+        //                   "dateBack": "${widget.flightInfo.dateBack.day}/${widget.flightInfo.dateBack.month}/${widget.flightInfo.dateBack.year}",
+        //                   "flightNoBack": widget.flightInfo.planeId2,
+        //                   "companyBack": widget.flightInfo.company2,
+        //                   "timeDepartBack": widget.flightInfo.timeDepart2, // Giờ đi lượt về
+        //                   "timeBackBack": widget.flightInfo.timeBack2,
+        //                 }
+        //               };
+        //
+        //               // KIỂM TRA ĐĂNG NHẬP
+        //               User? currentUser = FirebaseAuth.instance.currentUser;
+        //
+        //               if (currentUser != null) {
+        //                 // NẾU ĐÃ ĐĂNG NHẬP: Lưu lên Cloud Firestore
+        //                 await FirebaseFirestore.instance
+        //                     .collection('users')
+        //                     .doc(currentUser.uid)
+        //                     .collection('tickets')
+        //                     .doc(randomPNR) // Lấy mã PNR làm ID lưu trữ
+        //                     .set(newTicket);
+        //                 print("=== ĐÃ LƯU LÊN FIREBASE CLOUD ===");
+        //               } else {
+        //                 // NẾU CHƯA ĐĂNG NHẬP: Lưu Offline vào bộ nhớ máy
+        //                 SharedPreferences prefs = await SharedPreferences.getInstance();
+        //                 List<String> savedData = prefs.getStringList('my_tickets') ?? [];
+        //                 savedData.add(json.encode(newTicket));
+        //                 await prefs.setStringList('my_tickets', savedData);
+        //                 print("=== ĐÃ LƯU OFFLINE CHO KHÁCH VÃNG LAI ===");
+        //               }
+        //
+        //               // Chuyển sang trang xem chi tiết vé
+        //               Navigator.of(context).push(new MaterialPageRoute(
+        //                   builder: (context) => new FinishBookingPage(widget.flightInfo)));
+        //
+        //             } catch (e) {
+        //               print("=== LỖI RỒI: $e ===");
+        //             }
+        //
+        //             // --- KẾT THÚC ---
+        //           }
+        //         }
+        //       }
+        //     }
+        //   },
+        //   child: new Container(
+        //     width: double.infinity,
+        //     height: MediaQuery.of(context).size.width * 0.13,
+        //     padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.0314),
+        //     decoration: new BoxDecoration(
+        //       color: Color.fromRGBO(18, 175, 60, 1.0),
+        //     ),
+        //     child: new Center(
+        //       child: Row(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: <Widget>[
+        //           Padding(
+        //             padding: EdgeInsets.only(right: 8.0),
+        //             child: new Icon(
+        //               Icons.check_circle,
+        //               color: Colors.white,
+        //             ),
+        //           ),
+        //           new Text(
+        //             "HOÀN TẤT",
+        //             style: new TextStyle(
+        //                 color: Colors.white,
+        //                 fontFamily: "Roboto Medium",
+        //                 fontSize: MediaQuery.of(context).size.width * 0.0457),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
         bottomNavigationBar: new TextButton(
           style: TextButton.styleFrom(padding: EdgeInsets.all(0.0)),
-          // onPressed: () {
-          //   if (!isAdultCompletelyFilled() ||
-          //       !isChildCompletelyFilled() ||
-          //       !isInfantCompletelyFilled() ||
-          //       !widget.flightInfo.contact.isFullOFInfo()) {
-          //     _confirmAllInfoAreFilled(context,
-          //         "Bạn vui lòng điền đầy đủ các thông tin bắt buộc trong \"Thông tin khách hàng\" trước khi thanh toán");
-          //   } else {
-          //     if (!isChildBirthdateValid() || !isInfantBirthdateValid()) {
-          //       _confirmAllInfoAreFilled(context,
-          //           "Ngày tháng năm sinh không hợp lệ! Vui lòng kiểm tra lại.");
-          //     } else {
-          //       if (widget.flightInfo.contact.email.length > 0 &&
-          //           !widget.flightInfo.contact.isValidEmail()) {
-          //         _confirmAllInfoAreFilled(
-          //             context, "Email không hợp lệ! Vui lòng kiểm tra lại.");
-          //       } else {
-          //         if (!widget.flightInfo.contact.isValidPhone()) {
-          //           _confirmAllInfoAreFilled(context,
-          //               "Số điện thoại không hợp lệ! Vui lòng kiểm tra lại.");
-          //         } else {
-          //           widget.flightInfo.totalPrice += pricePayway;
-          //           //==================================
-          //           print(
-          //               "company1 at fillInfo: ${widget.flightInfo.company1}");
-          //           print(
-          //               "company2 at fillInfo: ${widget.flightInfo.company2}");
-          //           Navigator.of(context).push(new MaterialPageRoute(
-          //               builder: (context) =>
-          //                   new FinishBookingPage(widget.flightInfo)));
-          //         }
-          //       }
-          //     }
-          //   }
-          // },
           onPressed: () async {
             if (!isAdultCompletelyFilled() ||
                 !isChildCompletelyFilled() ||
@@ -4616,38 +4701,50 @@ class _FillCustomerInfoPageSupportState
                     widget.flightInfo.totalPrice += pricePayway;
 
                     // --- BẮT ĐẦU LƯU VÉ VỚI TRY-CATCH ---
-                    // --- BẮT ĐẦU LƯU VÉ LAI (HYBRID) ---
                     try {
-                      print("=== 1. CHUẨN BỊ LƯU VÉ ===");
                       String randomPNR = "VJ${(100000 + DateTime.now().millisecondsSinceEpoch % 900000).toString()}";
 
+                      // 1. TẠO THÔNG TIN VÉ LƯỢT ĐI (Mặc định)
                       Map<String, dynamic> newTicket = {
                         "pnr": randomPNR,
+                        "createdAt": DateTime.now().millisecondsSinceEpoch,
                         "depart": widget.flightInfo.depart,
                         "destination": widget.flightInfo.destination,
                         "date": "${widget.flightInfo.dateDepart.day}/${widget.flightInfo.dateDepart.month}/${widget.flightInfo.dateDepart.year}",
+                        "timeDepart": widget.flightInfo.timeDepart1, // Giờ cất cánh
+                        "timeArrive": widget.flightInfo.timeBack1,   // Giờ hạ cánh
                         "flightNo": widget.flightInfo.planeId1,
                         "company": widget.flightInfo.company1,
                         "price": widget.flightInfo.totalPrice,
                         "contactName": widget.flightInfo.contact.fullname,
                         "contactPhone": widget.flightInfo.contact.phone,
                         "contactEmail": widget.flightInfo.contact.email,
+                        "isRoundTrip": widget.flightInfo.isRoundTrip,
                       };
 
-                      // KIỂM TRA ĐĂNG NHẬP
+                      // 2. NẾU CÓ KHỨ HỒI -> GẮN THÊM DỮ LIỆU LƯỢT VỀ (Cách viết này chống lỗi syntax 100%)
+                      if (widget.flightInfo.isRoundTrip) {
+                        newTicket["dateReturn"] = "${widget.flightInfo.dateBack.day}/${widget.flightInfo.dateBack.month}/${widget.flightInfo.dateBack.year}";
+                        newTicket["timeDepartReturn"] = widget.flightInfo.timeDepart2;
+                        newTicket["timeArriveReturn"] = widget.flightInfo.timeBack2;
+                        newTicket["flightNoReturn"] = widget.flightInfo.planeId2;
+                        newTicket["companyReturn"] = widget.flightInfo.company2;
+                      }
+
+                      // 3. KIỂM TRA ĐĂNG NHẬP VÀ LƯU
                       User? currentUser = FirebaseAuth.instance.currentUser;
 
                       if (currentUser != null) {
-                        // NẾU ĐÃ ĐĂNG NHẬP: Lưu lên Cloud Firestore
+                        // Đã đăng nhập -> Lưu lên Firebase Cloud
                         await FirebaseFirestore.instance
                             .collection('users')
                             .doc(currentUser.uid)
                             .collection('tickets')
-                            .doc(randomPNR) // Lấy mã PNR làm ID lưu trữ
+                            .doc(randomPNR)
                             .set(newTicket);
                         print("=== ĐÃ LƯU LÊN FIREBASE CLOUD ===");
                       } else {
-                        // NẾU CHƯA ĐĂNG NHẬP: Lưu Offline vào bộ nhớ máy
+                        // Chưa đăng nhập -> Lưu Offline Local
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         List<String> savedData = prefs.getStringList('my_tickets') ?? [];
                         savedData.add(json.encode(newTicket));
@@ -4660,10 +4757,8 @@ class _FillCustomerInfoPageSupportState
                           builder: (context) => new FinishBookingPage(widget.flightInfo)));
 
                     } catch (e) {
-                      print("=== LỖI RỒI: $e ===");
+                      print("=== LỖI LƯU VÉ: $e ===");
                     }
-
-                    // --- KẾT THÚC ---
                   }
                 }
               }
@@ -4693,14 +4788,14 @@ class _FillCustomerInfoPageSupportState
                         color: Colors.white,
                         fontFamily: "Roboto Medium",
                         fontSize: MediaQuery.of(context).size.width * 0.0457),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
+        );
+      }
+    }
 

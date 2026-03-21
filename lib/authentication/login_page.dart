@@ -3,6 +3,7 @@ import '../utils/auth_service.dart';
 import 'register_page.dart';
 import 'forgot_password_page.dart';
 import '../page/home_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,10 +33,13 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // --- HÀM XỬ LÝ ĐĂNG NHẬP GOOGLE (Đã sửa để hiện bảng chọn Email) ---
+  // HÀM XỬ LÝ ĐĂNG NHẬP GOOGLE
   void _handleGoogleSignIn() async {
     try {
-      // Gọi hàm đăng nhập xịn từ AuthService của bạn
+
+      await GoogleSignIn().signOut();
+
+
       final user = await AuthService().signInWithGoogle();
 
       if (user != null) {
@@ -44,11 +48,10 @@ class _LoginPageState extends State<LoginPage> {
           SnackBar(content: Text('Đăng nhập thành công: ${user.displayName}'), backgroundColor: Colors.green),
         );
 
-        // --- ĐÃ MỞ KHÓA LỆNH CHUYỂN TRANG ---
         // Rút hẳn trang Login đi và đắp trang Home lên
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) =>  HomePage()),
         );
       }
     } catch (e) {
@@ -59,10 +62,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleSkip() {
-    // Dùng pushReplacement để chuyển sang HomePage và đóng vĩnh viễn trang Login (người dùng bấm nút Back trên điện thoại sẽ không quay lại Login được nữa)
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()), // Thay tên class HomePage nếu ông đặt tên khác
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
