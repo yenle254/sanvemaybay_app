@@ -2,6 +2,9 @@ import 'package:sanvemaybay_app_fixed/module/item_in_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:sanvemaybay_app_fixed/page/business_rule_page.dart';
 import 'package:sanvemaybay_app_fixed/page/booking_history_page.dart';
+import '../authentication/user_page.dart';
+
+import '../authentication/login_page.dart';
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,7 +63,7 @@ class _CustomDrawerSupportState extends State<CustomDrawerSupport> {
                     color: Colors.white,
                   ),
                   title: Text(
-                    "Vé của tôi",
+                    "  Vé của tôi",
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Roboto Medium",
@@ -135,6 +138,16 @@ class _CustomDrawerSupportState extends State<CustomDrawerSupport> {
                     color: Colors.white,
                   ),
                   "chat_zalo"),
+
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                  leading: Icon(Icons.account_circle, size: MediaQuery.of(context).size.width * 0.06, color: Colors.white),
+                  title: Text("  Tài khoản", style: TextStyle(color: Colors.white, fontFamily: "Roboto Medium", fontSize: MediaQuery.of(context).size.width * 0.04)),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserPage()));
+                  },
+                ),
           
                 new Expanded(
                   flex: 1,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../utils/auth_service.dart'; // THÊM DÒNG NÀY ĐỂ GỌI ĐƯỢC FIREBASE (Sửa lại đường dẫn nếu cần)
+import '../utils/auth_service.dart';
+import 'register_page.dart';
+import 'forgot_password_page.dart';
+import '../page/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,12 +39,17 @@ class _LoginPageState extends State<LoginPage> {
       final user = await AuthService().signInWithGoogle();
 
       if (user != null) {
-        // Nếu chọn email thành công
+        // Nếu chọn email thành công thì báo xanh
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Đăng nhập thành công: ${user.displayName}'), backgroundColor: Colors.green),
         );
-        // Chuyển sang trang chủ (Bạn sửa lại tên route '/home' cho khớp với app của bạn nhé)
-        // Navigator.pushReplacementNamed(context, '/home');
+
+        // --- ĐÃ MỞ KHÓA LỆNH CHUYỂN TRANG ---
+        // Rút hẳn trang Login đi và đắp trang Home lên
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -51,19 +59,67 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleSkip() {
-    Navigator.pop(context);
+    // Dùng pushReplacement để chuyển sang HomePage và đóng vĩnh viễn trang Login (người dùng bấm nút Back trên điện thoại sẽ không quay lại Login được nữa)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()), // Thay tên class HomePage nếu ông đặt tên khác
+    );
   }
 
-  void _handleLogin() {
-    print("Code xử lý đăng nhập Email ở đây");
+  Future<void> _handleLogin() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // 1. Kiểm tra không được để trống
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Vui lòng nhập Email và Mật khẩu!'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    try {
+      // 2. Gọi Firebase để kiểm tra tài khoản
+      final user = await AuthService().loginWithEmail(email, password);
+
+      if (user != null) {
+        // Thành công: Báo xanh và bay vào HomePage
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đăng nhập thành công!'), backgroundColor: Colors.green),
+        );
+
+        // Rút trang Login đi và mở Trang chủ
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        // Thất bại: Báo đỏ
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sai Email hoặc Mật khẩu!'), backgroundColor: Colors.red),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi: $e'), backgroundColor: Colors.red),
+      );
+    }
   }
 
   void _handleForgotPassword() {
-    print("Code xử lý quên mật khẩu ở đây");
+    // Chuyển sang trang Quên Mật Khẩu
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+    );
   }
 
   void _handleRegister() {
-    print("Code chuyển trang Đăng ký ở đây");
+    // Chuyển sang trang Đăng Ký
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RegisterPage()),
+    );
   }
 
   @override
@@ -193,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 25),
 
-                    // --- ĐÃ SỬA LỖI VỠ KHUNG GOOGLE ---
+
                     InkWell(
                       onTap: _handleGoogleSignIn,
                       borderRadius: BorderRadius.circular(10),
@@ -203,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Thay ảnh bị lỗi bằng chữ G có màu giống Google
+
                             Text("G", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue)),
                             SizedBox(width: 15),
                             Text("Đăng nhập bằng Google", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87)),

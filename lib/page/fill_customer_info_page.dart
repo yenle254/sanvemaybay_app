@@ -12,7 +12,8 @@ import 'package:sanvemaybay_app_fixed/customize_object/adult.dart';
 import 'package:sanvemaybay_app_fixed/customize_object/child.dart';
 import 'package:sanvemaybay_app_fixed/page/finish_booking_page.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 late FlightInfoObject tmpflightInfo;
 
 FlightInfoObject tmpF = new FlightInfoObject();
@@ -3837,20 +3838,19 @@ class _FillCustomerInfoPageSupportState
     apiKey = widget.flightInfo.apiKey;
 
     void _calculateTotal() {
-      totalPaymentDepart =
-          widget.flightInfo.priceDepart * widget.flightInfo.noOfAdult +
-              widget.flightInfo.childDepartPrice +
-              widget.flightInfo.infantDepartPrice +
-              widget.flightInfo.adultDepartTax +
-              widget.flightInfo.childDepartTax +
-              widget.flightInfo.infantDepartTax;
-      totalPaymentBack =
-          widget.flightInfo.priceBack * widget.flightInfo.noOfAdult +
-              widget.flightInfo.childBackPrice +
-              widget.flightInfo.infantBackPrice +
-              widget.flightInfo.adultBackTax +
-              widget.flightInfo.childBackTax +
-              widget.flightInfo.infantBackTax;
+      // TÍNH TIỀN LƯỢT ĐI: Chỉ cộng tiền trẻ em/em bé nếu số lượng > 0
+      totalPaymentDepart = (widget.flightInfo.priceDepart * widget.flightInfo.noOfAdult) +
+          widget.flightInfo.adultDepartTax +
+          (widget.flightInfo.noOfChild > 0 ? (widget.flightInfo.childDepartPrice + widget.flightInfo.childDepartTax) : 0) +
+          (widget.flightInfo.noOfInfant > 0 ? (widget.flightInfo.infantDepartPrice + widget.flightInfo.infantDepartTax) : 0);
+
+      // TÍNH TIỀN LƯỢT VỀ (Nếu có khứ hồi)
+      totalPaymentBack = (widget.flightInfo.priceBack * widget.flightInfo.noOfAdult) +
+          widget.flightInfo.adultBackTax +
+          (widget.flightInfo.noOfChild > 0 ? (widget.flightInfo.childBackPrice + widget.flightInfo.childBackTax) : 0) +
+          (widget.flightInfo.noOfInfant > 0 ? (widget.flightInfo.infantBackPrice + widget.flightInfo.infantBackTax) : 0);
+
+      // TỔNG CỘNG CHUNG
       widget.flightInfo.totalPrice = totalPaymentBack + totalPaymentDepart;
     }
     _calculateFares(
@@ -4616,11 +4616,9 @@ class _FillCustomerInfoPageSupportState
                     widget.flightInfo.totalPrice += pricePayway;
 
                     // --- BẮT ĐẦU LƯU VÉ VỚI TRY-CATCH ---
+                    // --- BẮT ĐẦU LƯU VÉ LAI (HYBRID) ---
                     try {
-                      print("=== 1. BẮT ĐẦU LƯU VÉ CHÍNH THỨC ===");
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                      List<String> savedData = prefs.getStringList('my_tickets') ?? [];
-
+                      print("=== 1. CHUẨN BỊ LƯU VÉ ===");
                       String randomPNR = "VJ${(100000 + DateTime.now().millisecondsSinceEpoch % 900000).toString()}";
 
                       Map<String, dynamic> newTicket = {
@@ -4636,17 +4634,35 @@ class _FillCustomerInfoPageSupportState
                         "contactEmail": widget.flightInfo.contact.email,
                       };
 
-                      savedData.add(json.encode(newTicket));
-                      bool isSaved = await prefs.setStringList('my_tickets', savedData);
+                      // KIỂM TRA ĐĂNG NHẬP
+                      User? currentUser = FirebaseAuth.instance.currentUser;
 
-                      if (isSaved) {
-
-                        Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (context) => new FinishBookingPage(widget.flightInfo)));
+                      if (currentUser != null) {
+                        // NẾU ĐÃ ĐĂNG NHẬP: Lưu lên Cloud Firestore
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(currentUser.uid)
+                            .collection('tickets')
+                            .doc(randomPNR) // Lấy mã PNR làm ID lưu trữ
+                            .set(newTicket);
+                        print("=== ĐÃ LƯU LÊN FIREBASE CLOUD ===");
+                      } else {
+                        // NẾU CHƯA ĐĂNG NHẬP: Lưu Offline vào bộ nhớ máy
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        List<String> savedData = prefs.getStringList('my_tickets') ?? [];
+                        savedData.add(json.encode(newTicket));
+                        await prefs.setStringList('my_tickets', savedData);
+                        print("=== ĐÃ LƯU OFFLINE CHO KHÁCH VÃNG LAI ===");
                       }
-                    } catch (e) {
 
+                      // Chuyển sang trang xem chi tiết vé
+                      Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (context) => new FinishBookingPage(widget.flightInfo)));
+
+                    } catch (e) {
+                      print("=== LỖI RỒI: $e ===");
                     }
+
                     // --- KẾT THÚC ---
                   }
                 }
