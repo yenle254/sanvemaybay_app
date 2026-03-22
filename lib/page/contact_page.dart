@@ -190,30 +190,20 @@ class _ContactPageSupportState extends State<ContactPageSupport> {
                               ),
                             ),
                           ),
-                          onPressed: () async {
-                            var connectivityResult =
-                                await new Connectivity().checkConnectivity();
-                            // if (connectivityResult !=
-                            //         ConnectivityResult.mobile &&
-                            //     connectivityResult != ConnectivityResult.wifi) {
-                            //   _confirmDialog(context,
-                            //       "Không có kết nối mạng. Vui lòng kiểm tra lại.");
-                            bool isOnline = false;
-                            if (connectivityResult is Iterable) {
-                              final results = connectivityResult.cast<ConnectivityResult>().toSet();
-                              isOnline = results.contains(ConnectivityResult.mobile) ||
-                                results.contains(ConnectivityResult.wifi) ||
-                                results.contains(ConnectivityResult.ethernet) ||
-                                results.contains(ConnectivityResult.vpn) ||
-                                results.contains(ConnectivityResult.other);
-                            }
-                            if (!isOnline) {
-                              _confirmDialog(context,
-                                  "Không có kết nối mạng. Vui lòng kiểm tra lại.");
-                            } else {
-                              Navigator.of(context).pushNamed("/webview");
-                            }
-                          },
+                            onPressed: () async {
+                              // Hiển thị thông báo SnackBar ở dưới cùng màn hình
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Tính năng chọn ảnh từ thư viện đang được phát triển',
+                                    style: TextStyle(color: Colors.white), // Chữ màu trắng
+                                  ),
+                                  backgroundColor: Colors.black87, // Màu nền đen mờ giống trong ảnh
+                                  duration: Duration(seconds: 2), // Hiển thị trong 2 giây
+                                  behavior: SnackBarBehavior.floating, // Hiển thị dạng nổi (nếu muốn giống ảnh)
+                                ),
+                              );
+                            },
                         )
                       ],
                     ),

@@ -87,16 +87,7 @@ class _CustomDrawerSupportState extends State<CustomDrawerSupport> {
                       color: Colors.white,
                     ),
                     "sale_ticket_in_month"),
-          
-                //Tin tuc
-                new ItemInDrawer(
-                    "Tin tức",
-                    new Icon(
-                      Icons.new_releases,
-                      size: MediaQuery.of(context).size.width * 0.06,
-                      color: Colors.white,
-                    ),
-                    "announce"),
+
           
                 //Khuyến mãi
                 new ItemInDrawer(
