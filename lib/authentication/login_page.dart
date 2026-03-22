@@ -161,13 +161,13 @@ class _LoginPageState extends State<LoginPage> {
                     Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: const Color(0xFFC21500), width: 3),
-                            color: Colors.white.withValues(alpha: 0.8),
+                          // Xóa bỏ hoàn toàn padding, decoration cũ
+                          child: Image.asset(
+                            'assets/logo.PNG',
+                            width: 95,
+                            height: 95,
+                            fit: BoxFit.contain, // Giữ nguyên tỉ lệ, không bị méo ảnh
                           ),
-                          child: const Icon(Icons.flight_takeoff, size: 60, color: Color(0xFFC21500)),
                         ),
                         const SizedBox(height: 15),
                         const Text(
@@ -258,13 +258,25 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
 
-                            Text("G", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue)),
-                            SizedBox(width: 15),
-                            Text("Đăng nhập bằng Google", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87)),
+                            Image.asset(
+                              'assets/google_logo.png',
+                              width: 24,  // Set kích thước 24 để bằng đúng cái fontSize 24 cũ của ông
+                              height: 24,
+                              fit: BoxFit.contain, // Đảm bảo logo không bị méo
+                            ),
+                            const SizedBox(width: 15),
+                            const Text(
+                                "Đăng nhập bằng Google",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87
+                                )
+                            ),
                           ],
                         ),
                       ),

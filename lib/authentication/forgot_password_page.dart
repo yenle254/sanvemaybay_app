@@ -24,7 +24,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   void _handleResetPassword() async {
-    // Gọi hàm reset password của Firebase ở đây
+    // Gọi hàm reset password của Firebase
     print("Gửi email khôi phục tới: ${_emailController.text}");
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Vui lòng kiểm tra hộp thư email của bạn!'), backgroundColor: Colors.green),
