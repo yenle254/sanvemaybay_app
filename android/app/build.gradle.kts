@@ -40,7 +40,6 @@ android {
     }
 
     signingConfigs {
-
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String?
             keyPassword = keystoreProperties["keyPassword"] as String?
@@ -48,8 +47,8 @@ android {
             storePassword = keystoreProperties["storePassword"] as String?
         }
 
-        // Dành cho team code chạy thử dùng chung debug.keystore
-        create("debug") {
+
+        getByName("debug") {
             storeFile = file("debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
@@ -68,7 +67,6 @@ android {
             )
         }
 
-        // THÊM ĐOẠN NÀY VÀO: Ép môi trường lập trình phải dùng chìa khóa team
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
         }
